@@ -1,0 +1,38 @@
+# ML Pipeline Threat Models
+
+This directory contains threat models for the scoped portion of the ML pipeline:
+
+1. Data moving from external and internal sources into the landing zone.
+2. Data ingestion from the landing zone into the ingestion layer.
+
+Out of scope for these models:
+
+- Feature engineering
+- Model training
+- Model registry
+- Model serving
+- Monitoring and inference feedback loops
+- Business application consumers
+
+## Threat Model Inventory
+
+| Stage | Threat model | Scope |
+| --- | --- | --- |
+| Source to landing zone | [01-source-to-landing-zone.md](01-source-to-landing-zone.md) | Files, events, API payloads, database extracts, and third-party feeds arriving at the landing zone. |
+| Data ingestion layer | [02-data-ingestion-layer.md](02-data-ingestion-layer.md) | Validation, parsing, normalization, metadata capture, quarantine, and controlled movement from landing into ingestion storage. |
+
+## Shared Security Objectives
+
+- Preserve data integrity before it is trusted by downstream ML workflows.
+- Prevent unauthorized data submission, modification, or deletion.
+- Detect malicious, malformed, stale, poisoned, or misrouted data early.
+- Maintain source identity, lineage, and ingestion auditability.
+- Restrict sensitive data exposure during transfer, landing, validation, and parsing.
+- Isolate untrusted data until validation and policy checks complete.
+
+## Shared Assumptions
+
+- Source systems can be internal applications, partner systems, vendor feeds, object storage drops, message streams, APIs, or database exports.
+- The landing zone is treated as an untrusted or semi-trusted boundary because data has not yet been validated.
+- All data accepted into the pipeline should have source identity, schema/version metadata, arrival timestamp, and integrity metadata where possible.
+- Downstream ML pipeline stages must not consume raw landing data directly unless explicitly approved by policy.
